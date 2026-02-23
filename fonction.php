@@ -1,11 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+
+    <?php
+function validerNom($nom) {
+    $nom = trim($nom);
+
+    if (strlen($nom) < 2) {
+        return "Le nom doit contenir au moins 2 caractères.";
+    }
+
     
-</body>
-</html>
+    if (!preg_match("/^[a-zA-Z]+$/", $nom)) {
+        return "Le nom ne doit contenir que des lettres.";
+    }
+
+    return true; 
+}
+?>
