@@ -1,5 +1,5 @@
 <?php
-function saisiUnEtudiant(array $newEtudiant):array{
+function saisiUnEtudiant():array{
     $nom = readline("saisir votre nom: ");
     $prenom = readline("saisir votre prenom: ");
     $email = readline("saisir votre email: ");
