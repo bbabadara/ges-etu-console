@@ -1,13 +1,15 @@
 <?php
-$etudiants=[
-    ['matricule'=>'MAT0001','nom' => 'Dupont', 'prenom' => 'Jean', 'email' => 'cD3yv@example.com','telephone'=>"7712345678",'classe_id'=>1],
-    ['matricule'=>'MAT0002','nom' => 'Ndiaye', 'prenom' => 'Fatou', 'email' => 'fad@example.com','telephone'=>"7712345679",'classe_id'=>2],
-     ['matricule'=>'MAT0003','nom'=>'Martin','prenom'=>'Claire','email'=>'claire.martin@example.com','telephone'=>'7712345680','classe_id'=>1],
-    ['matricule'=>'MAT0004','nom'=>'Diallo','prenom'=>'Moussa','email'=>'moussa.diallo@example.com','telephone'=>'7712345681','classe_id'=>3],
-    ['matricule'=>'MAT0005','nom'=>'Bernard','prenom'=>'Lucas','email'=>'lucas.bernard@example.com','telephone'=>'7712345682','classe_id'=>2],
-    ['matricule'=>'MAT0006','nom'=>'Fall','prenom'=>'Aminata','email'=>'aminata.fall@example.com','telephone'=>'7712345683','classe_id'=>1],
-    ['matricule'=>'MAT0007','nom'=>'Moreau','prenom'=>'Sophie','email'=>'sophie.moreau@example.com','telephone'=>'7712345684','classe_id'=>3],
-];
+// $etudiants=[
+//     ['matricule'=>'MAT0001','nom' => 'Dupont', 'prenom' => 'Jean', 'email' => 'cD3yv@example.com','telephone'=>"7712345678",'classe_id'=>1],
+//     ['matricule'=>'MAT0002','nom' => 'Ndiaye', 'prenom' => 'Fatou', 'email' => 'fad@example.com','telephone'=>"7712345679",'classe_id'=>2],
+//      ['matricule'=>'MAT0003','nom'=>'Martin','prenom'=>'Claire','email'=>'claire.martin@example.com','telephone'=>'7712345680','classe_id'=>1],
+//     ['matricule'=>'MAT0004','nom'=>'Diallo','prenom'=>'Moussa','email'=>'moussa.diallo@example.com','telephone'=>'7712345681','classe_id'=>3],
+//     ['matricule'=>'MAT0005','nom'=>'Bernard','prenom'=>'Lucas','email'=>'lucas.bernard@example.com','telephone'=>'7712345682','classe_id'=>2],
+//     ['matricule'=>'MAT0006','nom'=>'Fall','prenom'=>'Aminata','email'=>'aminata.fall@example.com','telephone'=>'7712345683','classe_id'=>1],
+//     ['matricule'=>'MAT0007','nom'=>'Moreau','prenom'=>'Sophie','email'=>'sophie.moreau@example.com','telephone'=>'7712345684','classe_id'=>3],
+// ];
+
+
 
 $classes=[
     ['id'=>1,'code' => 'L1DevWeb', 'libelle' => 'Licence 1 Dev Web'],
@@ -17,7 +19,9 @@ $classes=[
 
 //fonction qui retourne tous les etudiants 
 function getAllEtudiants():array{
-    global $etudiants;
+    $file="data.json";
+    $json=file_get_contents($file);
+    $etudiants=json_decode($json,true);
     return $etudiants;
 }
 //fonction qui retourne un etudiant par son matricule
@@ -66,16 +70,20 @@ function validerEmail($email){
 
 //fonction qui saisie et  retourne un etudiant 
 function saisiUnEtudiant():array{
+    $matricule = readline("saisir votre matricule: ");
     $nom = readline("saisir votre nom: ");
     $prenom = readline("saisir votre prenom: ");
     $email = readline("saisir votre email: ");
     $telephone = readline("saisir telephone: ");
+    $classe_id = readline("saisir votre classe id: ");
 
     return [
+        "matricule" => $matricule,
         "nom" => $nom,
         "prenom" => $prenom,
         "email" => $email,
         "telephone" => $telephone,
+        "classe_id" => $classe_id
     ];
 }
 
@@ -92,6 +100,14 @@ function afficherMenu():void{
     echo "5-Quitter \n";
 }
 
+function ajouterEtudiant(array $etudiant):void{
+    $etudiants=getAllEtudiants();
+    $etudiants[]=$etudiant;
+    $json=json_encode($etudiants);
+    file_put_contents('data.json', $json);
+    
+}
+
 do {
     afficherMenu();
     $choix = readline("Votre choix : ");
@@ -103,6 +119,8 @@ do {
             break;
         case 2:
             echo "Ajouter un étudiant \n";
+            $etudiant=saisiUnEtudiant();
+            ajouterEtudiant($etudiant);
             break;
         case 3:
             echo "Voir les details d'un étudiant \n";
